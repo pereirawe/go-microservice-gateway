@@ -107,3 +107,23 @@ func generateToken(username string) string {
 	}
 	return tokenString
 }
+
+// JWTMiddleware is a middleware that validates JWT tokens.
+func JWTMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		if authHeader == "" || len(authHeader) < 8 || authHeader[:7] != "Bearer " {
+			handleLoginFailure(w, "Invalid or missing token", http.StatusUnauthorized)
+			return
+		}
+
+		tokenString := authHeader[7:]
+		if _, err := verifyToken(tokenString); err != nil {
+			log.Printf("Token verification failed: %v", err)
+			handleLoginFailure(w, "Invalid token", http.StatusUnauthorized)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
