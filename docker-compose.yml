@@ -1,0 +1,23 @@
+services:
+    go-microservice-gateway:
+        container_name: go-microservice-gateway
+        build: .
+        ports:
+            - 8080:8080
+        depends_on:
+            - database
+
+    database:
+        container_name: go-microservice-gateway-database
+        image: postgres:12
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_PASSWORD: 123456
+            POSTGRES_USER: postgres
+            POSTGRES_DB: postgres
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+
+volumes:
+    pgdata: {}
