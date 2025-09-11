@@ -1,0 +1,17 @@
+upstream default_app {
+    server gateway-service:8080;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name 52.71.31.205;
+
+    location / {
+        proxy_pass http://default_app;
+    }
+
+    location ~ /.well-known/acme-challenge {
+        root /tmp/acme_challenge;
+    }
+}

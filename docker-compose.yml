@@ -1,14 +1,35 @@
 services:
     go-microservice-gateway:
-        container_name: go-microservice-gateway
-        build: .
+        build:
+            context: .
+            dockerfile: ./Docker/Dockerfile
+        stdin_open: true
+        tty: true
+        # depends_on:
+        # - nginx
+        # - database
+        networks:
+            gateway:
+                ipv4_address: ${GATEWAY_IPV4_ADDRESS}
+
+    nginx:
+        container_name: "gateway-nginx"
+        image: nginx:latest
         ports:
-            - 8080:8080
-        depends_on:
-            - database
+            - 80:80
+            - 443:443
+        volumes:
+            - /etc/letsencrypt:/etc/letsencrypt:ro
+            - /tmp/acme_challenge:/tmp/acme_challenge
+            - ./Docker/nginx/conf.d/:/etc/nginx/conf.d/
+            - ./Docker/nginx/logs/:/etc/nginx/logs
+        restart: unless-stopped
+        networks:
+            gateway:
+                ipv4_address: ${NGINX_IPV4_ADDRESS}
 
     database:
-        container_name: go-microservice-gateway-database
+        container_name: gateway-db
         image: postgres:12
         ports:
             - 5432:5432
@@ -19,5 +40,12 @@ services:
         volumes:
             - pgdata:/var/lib/postgresql/data
 
+networks:
+    gateway:
+        name: "gateway"
+        ipam:
+            config:
+                - subnet: 10.5.0.0/24
+                  gateway: ${NETWORK_IPV4_ADDRESS}
 volumes:
     pgdata: {}
