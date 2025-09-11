@@ -58,8 +58,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 // JWTAuthorizationHandler validates JWT tokens for incoming requests.
 func JWTAuthorizationHandler(w http.ResponseWriter, r *http.Request) {
 	authHeader := r.Header.Get("Authorization")
-	if authHeader == "" || len(authHeader) < 7 || authHeader[:6] != "Bearer" {
-		handleLoginFailure(w, "Invalid token", http.StatusUnauthorized)
+	if authHeader == "" || len(authHeader) < 8 || authHeader[:7] != "Bearer " {
+		handleLoginFailure(w, "Invalid or missing token", http.StatusUnauthorized)
 		return
 	}
 
