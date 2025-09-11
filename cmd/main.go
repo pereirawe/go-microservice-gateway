@@ -25,11 +25,15 @@ func main() {
 
 	router.HandleFunc("/login", handlers.LoginHandler)
 
+	// Create a new subrouter for the microservices that require authentication.
+	apiRouter := router.NewRoute().Subrouter()
+	apiRouter.Use(handlers.JWTMiddleware)
+
 	microservices := microservices.GetMicroservices()
 
 	for microservice, url := range microservices {
 		path := "/" + microservice + "/{rest:.*}"
-		router.HandleFunc(path, handlers.CreateProxyHandler(url))
+		apiRouter.HandleFunc(path, handlers.CreateProxyHandler(url))
 	}
 
 	port := cfg.APPPort
