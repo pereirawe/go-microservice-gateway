@@ -74,8 +74,17 @@ func JWTAuthorizationHandler(w http.ResponseWriter, r *http.Request) {
 
 // verifyToken verifies the JWT token.
 func verifyToken(tokenString string) (jwt.MapClaims, error) {
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		log.Printf("Error loading configuration: %s", err)
+		return nil, fmt.Errorf("could not load configuration")
+	}
+
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte("secret-key"), nil
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(cfg.APPSecret), nil
 	})
 
 	if err != nil {
