@@ -1,0 +1,107 @@
+type: collection.insomnia.rest/5.0
+name: Go-MS
+meta:
+  id: wrk_67982c71e9204a7e9a42cc8e92811396
+  created: 1757619552207
+  modified: 1757619552207
+  description: ""
+collection:
+  - name: MS-AI
+    meta:
+      id: fld_a4ac9cdbf21e4b49810db180b946e3e4
+      created: 1757620078313
+      modified: 1757620087862
+      sortKey: -1757620078313
+      description: ""
+    children:
+      - url: http://localhost:8080/ms-ai/
+        name: Home
+        meta:
+          id: req_06dabaf5afdd4480a8f82eed02e7df11
+          created: 1757619591054
+          modified: 1757620091100
+          isPrivate: false
+          description: ""
+          sortKey: -1757620085344
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: "{{ _.authToken }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - url: http://localhost:8080/
+    name: Home
+    meta:
+      id: req_c4db635109104cb5a52bf988d351f1f4
+      created: 1757619560842
+      modified: 1757619622149
+      isPrivate: false
+      description: ""
+      sortKey: -1757619591154
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/login
+    name: Login
+    meta:
+      id: req_82c9a75151ad422cadaca7d9a6d7c217
+      created: 1757619578808
+      modified: 1757620368694
+      isPrivate: false
+      description: ""
+      sortKey: -1757619578808
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+    authentication:
+      type: basic
+      useISO88591: false
+      disabled: false
+      username: admin
+      password: password
+    scripts:
+      afterResponse: |
+        let response = insomnia.response.json();
+        insomnia.environment.set("authToken", response.token);
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_6ab831d414feb5145fe8b697ad771840cc41661f
+    created: 1757619552211
+    modified: 1757620508324
+environments:
+  name: Base Environment
+  meta:
+    id: env_6ab831d414feb5145fe8b697ad771840cc41661f
+    created: 1757619552209
+    modified: 1757620508325
+    isPrivate: false
+  data:
+    authToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc3MDY5MDgsInVzZXJuYW1lIjoiYWRtaW4ifQ.xUGzIumDicbl7Nq-5jtoWyIpPK9zYH4f12CpmrnFfjA
