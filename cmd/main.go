@@ -25,7 +25,6 @@ func main() {
 
 	router.HandleFunc("/login", handlers.LoginHandler)
 
-	// Create a new subrouter for the microservices that require authentication.
 	apiRouter := router.NewRoute().Subrouter()
 	apiRouter.Use(handlers.JWTMiddleware)
 

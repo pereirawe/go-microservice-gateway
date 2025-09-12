@@ -15,9 +15,7 @@ type LoginResponse struct {
 	Token string `json:"token"`
 }
 
-// TODO: Load config from env vars
-// var cfg *config.Config
-
+// handleLoginSuccess handles a successful login.
 func handleLoginSuccess(w http.ResponseWriter, username string) {
 	log.Printf("Login successful for user: %s", username)
 

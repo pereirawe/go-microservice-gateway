@@ -95,6 +95,9 @@ func LoadConfig() (*Config, error) {
 	return cfg, nil
 }
 
+// SetEnv sets the value of an environment variable if it is not already set.
+// If the variable is already set, it returns the current value.
+// If the variable is not set, it sets the value to the default value.
 func setEnv(key, defaultValue string) string {
 	value := os.Getenv(key)
 	if value == "" {
